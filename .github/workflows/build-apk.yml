@@ -1,0 +1,61 @@
+name: Build Debug APK
+
+on:
+  workflow_dispatch: # run manually from the Actions tab
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create .env from secret
+        run: echo "EXPO_PUBLIC_GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+
+      - name: Expo prebuild (generate native android/ project)
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Restrict build to arm64-v8a only (smaller, faster build)
+        run: |
+          echo "" >> android/gradle.properties
+          echo "reactNativeArchitectures=arm64-v8a" >> android/gradle.properties
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('android/**/*.gradle*') }}
+
+      - name: Build debug APK
+        working-directory: android
+        run: |
+          echo "org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m" >> gradle.properties
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kavya-2-0-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
