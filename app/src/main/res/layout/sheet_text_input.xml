@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/panel"
+    android:padding="22dp">
+
+    <View
+        android:layout_width="36dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/line"
+        android:layout_marginBottom="18dp"/>
+
+    <TextView
+        android:id="@+id/sheetInputTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Watermark text"
+        android:textColor="@color/text_main"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="14dp"/>
+
+    <EditText
+        android:id="@+id/sheetInputField"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="e.g. @yourname"
+        android:textColorHint="@color/text_dim"
+        android:textColor="@color/text_main"
+        android:background="@drawable/input_field_bg"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:maxLines="1"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnInputSave"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="@string/save_continue"
+        android:textAllCaps="false"
+        android:textColor="@color/teal_ink"
+        android:textStyle="bold"
+        android:background="@drawable/btn_primary"/>
+
+</LinearLayout>
