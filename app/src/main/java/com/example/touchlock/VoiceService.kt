@@ -107,27 +107,40 @@ class VoiceService : Service() {
         processCommand(text)
     }
 
+    /**
+     * Command letters (easier for the recognizer to catch reliably than full words):
+     *   A -> lock ON
+     *   B -> lock OFF
+     *   C -> scroll UP
+     *   D -> scroll DOWN
+     * We also keep the old full words as a fallback in case the recognizer returns them.
+     */
     private fun processCommand(text: String) {
         when {
-            containsWord(text, "on") || text.contains("lock") -> {
+            containsLetterOrWord(text, "a", listOf("on", "lock", "hey", "e")) -> {
                 OverlayController.showLock(applicationContext)
             }
-            containsWord(text, "off") || text.contains("unlock") -> {
+            containsLetterOrWord(text, "b", listOf("off", "unlock", "bee", "be")) -> {
                 OverlayController.hideLock(applicationContext)
             }
-            containsWord(text, "up") -> {
+            containsLetterOrWord(text, "c", listOf("up", "see", "sea")) -> {
                 TouchLockAccessibilityService.instance
                     ?.performScroll(TouchLockAccessibilityService.Direction.UP)
             }
-            containsWord(text, "down") -> {
+            containsLetterOrWord(text, "d", listOf("down", "dee", "de")) -> {
                 TouchLockAccessibilityService.instance
                     ?.performScroll(TouchLockAccessibilityService.Direction.DOWN)
             }
         }
     }
 
-    private fun containsWord(text: String, word: String): Boolean {
-        return Regex("\\b$word\\b").containsMatchIn(text)
+    private fun containsLetterOrWord(text: String, letter: String, altWords: List<String>): Boolean {
+        val cleaned = text.trim()
+        if (Regex("\\b$letter\\b").containsMatchIn(cleaned)) return true
+        for (w in altWords) {
+            if (Regex("\\b$w\\b").containsMatchIn(cleaned)) return true
+        }
+        return false
     }
 
     private fun startForegroundNotification() {
@@ -143,7 +156,7 @@ class VoiceService : Service() {
 
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("TouchLock voice assistant chal raha hai")
-            .setContentText("Bolen: on / off / up / down")
+            .setContentText("Bolen: A (on) / B (off) / C (up) / D (down)")
             .setSmallIcon(android.R.drawable.ic_lock_lock)
             .setOngoing(true)
             .build()

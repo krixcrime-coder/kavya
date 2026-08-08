@@ -2,17 +2,23 @@
 
 Voice-controlled touch lock for a phone with a flaky/ghost-touch screen.
 
-## Kya karta hai
-- **"on" / "lock" bolein** → screen ke upar ek transparent overlay lag jata hai jo har touch
+## Voice Commands
+Single letters use kiye hain kyunki recognizer poore words ("off"/"up"/"down") ko
+reliably nahi pakad pa raha tha — letters zyada consistently recognize hote hain:
+
+- **"A" bolein** → screen ke upar ek transparent overlay lag jata hai jo har touch
   (chahe ghost touch ho ya aapka apna touch) ko **consume** kar leta hai — koi bhi app ke
   andar click/tap register nahi hota. Touch hua wahan chhota sa laal "tick" dot dikhta hai
   taaki pata chale ki touch hua tha, bina use action mein badle.
-- **"off" / "unlock" bolein** → overlay hat jata hai, phone normal ho jata hai.
-- **"up" bolein** → screen neeche se upar slide hoti hai (pichla reel/content).
-- **"down" bolein** → screen upar se neeche slide hoti hai (agla reel/content) — reels/shorts
+- **"B" bolein** → overlay hat jata hai, phone normal ho jata hai.
+- **"C" bolein** → screen neeche se upar slide hoti hai (pichla reel/content).
+- **"D" bolein** → screen upar se neeche slide hoti hai (agla reel/content) — reels/shorts
   scroll karne jaisa. Ye lock ON hone par bhi kaam karta hai, kyunki ye Accessibility
   service ke through system-level gesture inject karta hai, overlay ke touch-blocking se
   independent hai.
+
+(Purane words "on"/"off"/"up"/"down" bhi fallback ke roop mein kaam karenge agar
+recognizer unhe pakad le, lekin A/B/C/D primary commands hain.)
 
 ## Setup (build karne ke baad phone par)
 1. `app-debug.apk` install karein (Unknown sources allow karna padega).
@@ -21,7 +27,7 @@ Voice-controlled touch lock for a phone with a flaky/ghost-touch screen.
    - Accessibility service ("TouchLock" ko list mein ON karein)
    - Microphone permission
 3. "Voice Assistant Start Karein" dabayein.
-4. Ab bolen **"on"** to lock ho jayega, **"off"** se khulega, **"up"/"down"** se scroll hoga.
+4. Ab bolen **"A"** to lock ho jayega, **"B"** se khulega, **"C"** se up scroll, **"D"** se down scroll.
 
 ## GitHub Actions se APK build karna
 Ye repo push karte hi `.github/workflows/android.yml` automatically chalega aur

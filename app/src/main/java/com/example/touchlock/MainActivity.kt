@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
             val serviceIntent = Intent(this, VoiceService::class.java)
             ContextCompat.startForegroundService(this, serviceIntent)
-            statusText.text = "Voice assistant chal raha hai. Bolen: on / off / up / down"
+            statusText.text = "Voice assistant chal raha hai. Bolen: A (on) / B (off) / C (up) / D (down)"
         }
 
         findViewById<Button>(R.id.btnStopVoice).setOnClickListener {
