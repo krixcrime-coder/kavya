@@ -1,4 +1,0 @@
-<resources>
-    <string name="app_name">TouchLock</string>
-    <string name="accessibility_service_description">TouchLock ko voice command se up/down scroll gestures chalane ki anumati deta hai jab lock on ho.</string>
-</resources>
