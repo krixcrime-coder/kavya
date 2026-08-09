@@ -36,6 +36,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f53fb66f-15b7-414d-8952-26172b806988"
+      }
+    },
+    "owner": "marcosyt"
   }
 }
