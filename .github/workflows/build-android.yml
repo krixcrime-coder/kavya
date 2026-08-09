@@ -1,0 +1,49 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build APK on EAS
+        run: eas build --platform android --profile preview --non-interactive --wait
+
+      - name: Download built APK
+        run: |
+          eas build:list --platform android --status finished --limit 1 --json --non-interactive > builds.json
+          node -e "
+            const fs = require('fs');
+            const builds = JSON.parse(fs.readFileSync('builds.json', 'utf-8'));
+            const url = builds[0].artifacts.buildUrl;
+            fs.writeFileSync('apk_url.txt', url);
+            console.log('APK URL:', url);
+          "
+          curl -L -o app-release.apk "$(cat apk_url.txt)"
+
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: app-release.apk
